@@ -22,7 +22,7 @@ if [ "$(docker inspect -f '{{.State.Running}}' "$PREFIX-registry")" != true ]; t
 fi
 until curl -sf "$REGISTRY/v2/" >/dev/null; do sleep 1; done
 
-docker build --build-arg VERSION="$VERSION" -t "$IMAGE" .
+docker build --build-arg VERSION="$VERSION" -t "$IMAGE" -t "$PREFIX/probe:$VERSION" .
 docker push "$IMAGE"
 VERSION="$VERSION" docker stack deploy --detach=false -c stack.yaml "$PREFIX"
 
